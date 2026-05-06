@@ -55,9 +55,10 @@ Eshel is designed so code and understanding evolve together, not separately.
 
 ## Daily loop
 1. Run `make session-bootstrap`.
-2. Select one task from `wiki/tasks/`.
-3. Implement smallest safe change with tests.
-4. Update canonical wiki pages and task status.
-5. Run `make wiki-health`.
-6. Sync `docs/development` memory and execution docs.
-7. Commit changes with clear scope.
+2. Run `make wrw` whenever you need a concise "Where Are We?" status snapshot.
+3. Select one task from `wiki/tasks/`.
+4. Implement smallest safe change with tests.
+5. Update canonical wiki pages and task status.
+6. Run `make wiki-health`.
+7. Sync `docs/development` memory and execution docs.
+8. Commit changes with clear scope.

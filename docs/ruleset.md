@@ -24,7 +24,9 @@ This file extends `ruleset.md` with operational controls.
 
 ## Status Protocol
 
-When asked "Where are we?", answer with exactly:
+`wrw` is the dedicated "Where Are We?" shortcut command for rapid status.
+
+When asked "Where are we?" (or when running `make wrw`), answer with exactly:
 
 - Completed
 - Recent
@@ -33,3 +35,4 @@ When asked "Where are we?", answer with exactly:
 - Risks/Blocks
 
 Source that answer from current state, session ledger, and kanban documents.
+Keep `docs/development/04-memory/WHERE_ARE_WE.md` synchronized as the concise snapshot artifact for this protocol.

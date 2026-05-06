@@ -15,5 +15,6 @@ This folder is the project execution control plane.
 2. `docs/ruleset.md`
 3. `schema/AGENTS.md`
 4. `wiki/index.md`
-5. `docs/development/04-memory/CURRENT_STATE.md`
-6. `docs/development/02-execution/KANBAN.md`
+5. `docs/development/04-memory/WHERE_ARE_WE.md`
+6. `docs/development/04-memory/CURRENT_STATE.md`
+7. `docs/development/02-execution/KANBAN.md`

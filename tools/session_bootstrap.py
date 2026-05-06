@@ -13,6 +13,7 @@ FILES = [
     "wiki/index.md",
     "wiki/project-brief.md",
     "wiki/log.md",
+    "docs/development/04-memory/WHERE_ARE_WE.md",
     "docs/development/04-memory/CURRENT_STATE.md",
     "docs/development/02-execution/KANBAN.md",
 ]

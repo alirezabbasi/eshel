@@ -1,4 +1,4 @@
-.PHONY: session-bootstrap wiki-index wiki-lint wiki-health new-task file-query ingest-initial validate-governance
+.PHONY: session-bootstrap wiki-index wiki-lint wiki-health new-task file-query ingest-initial validate-governance wrw
 
 session-bootstrap:
 	python3 tools/session_bootstrap.py
@@ -22,3 +22,6 @@ file-query:
 
 ingest-initial:
 	python3 tools/ingest.py raw/sources/initial-source.md --title "Initial source import" --kind source
+
+wrw:
+	python3 tools/wrw.py
