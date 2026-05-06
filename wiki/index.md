@@ -52,6 +52,7 @@ status: active
 ## Systems
 
 - [[systems/ai-native-engineering-os|Ai Native Engineering Os]]
+- [[systems/project-intelligence-compounding-model|Project Intelligence Compounding Model]]
 
 ## Tasks
 
