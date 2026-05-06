@@ -129,7 +129,9 @@ Use your coding assistant (Codex, Claude Code, Cursor, etc.) to:
 
 The development loop is:
 
-`idea -> structured knowledge -> task -> implementation -> verification -> updated knowledge`
+`idea -> structured knowledge -> task -> implementation -> verification -> bug management -> RCA -> updated knowledge`
+
+Detailed operating method: [Operational Loop Methodology](docs/development/01-methodology/OPERATIONAL_LOOP_METHODOLOGY.md)
 
 Eshel is designed so code and understanding evolve together, not separately.
 
