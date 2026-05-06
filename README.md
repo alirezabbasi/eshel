@@ -1,5 +1,7 @@
 # Eshel - LLM Engineering OS Scaffold
 
+![Eshel Banner](assets/eshel.png)
+
 Eshel is a general-purpose scaffold for AI-native software development.
 It implements an LLM Wiki-style persistent knowledge layer plus execution governance for building new systems or evolving existing codebases.
 
