@@ -1,36 +1,27 @@
-.PHONY: session-bootstrap wiki-index wiki-lint wiki-health new-task file-query ingest-initial validate-governance wrw init-wizard init-project
-
-CORE_DIR := echel-core
+.PHONY: session-bootstrap wiki-index wiki-lint wiki-health new-task file-query ingest-initial validate-governance wrw
 
 session-bootstrap:
-	$(MAKE) -C $(CORE_DIR) session-bootstrap
+	python3 tools/session_bootstrap.py
 
 wiki-index:
-	$(MAKE) -C $(CORE_DIR) wiki-index
+	python3 tools/wiki_index.py
 
 wiki-lint:
-	$(MAKE) -C $(CORE_DIR) wiki-lint
+	python3 tools/wiki_lint.py
 
 validate-governance:
-	$(MAKE) -C $(CORE_DIR) validate-governance
+	python3 tools/validate_governance.py
 
-wiki-health:
-	$(MAKE) -C $(CORE_DIR) wiki-health
+wiki-health: wiki-index wiki-lint validate-governance
 
 new-task:
-	$(MAKE) -C $(CORE_DIR) new-task
+	python3 tools/new_task.py
 
 file-query:
-	$(MAKE) -C $(CORE_DIR) file-query
+	python3 tools/file_query.py
 
 ingest-initial:
-	$(MAKE) -C $(CORE_DIR) ingest-initial
+	python3 tools/ingest.py raw/sources/initial-source.md --title "Initial source import" --kind source
 
 wrw:
-	$(MAKE) -C $(CORE_DIR) wrw
-
-init-wizard:
-	$(MAKE) -C $(CORE_DIR) init-wizard
-
-init-project:
-	$(MAKE) -C $(CORE_DIR) init-project
+	python3 tools/wrw.py
