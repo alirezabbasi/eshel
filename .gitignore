@@ -1,11 +1,16 @@
+# Workspace-level ignores for split architecture
+
+# Echel platform source is managed separately from generated projects
+echel-core/
+
+# Generated project workspaces (each project can own its own Git repo)
+projects/
+*/.git/
+
+# Python/artifact noise
 .env
 .venv/
 __pycache__/
 *.pyc
 .DS_Store
-raw/codebase/*/.git/
-
-# Obsidian local/app state (not project source)
-wiki/.obsidian/
-
 
