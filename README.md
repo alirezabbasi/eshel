@@ -83,19 +83,21 @@ This project is the result of a simple belief:
 ## Quick start
 
 ```bash
-python3 tools/project_init.py --name my-project --mode scratch
-make wiki-health
+make init-wizard
+# or non-interactive:
+make init-project NAME=my-project MODE=scratch DEST=.
 ```
 
 For an existing repo:
 
 ```bash
-python3 tools/project_init.py --name existing-project --mode existing --source /path/to/repo
-python3 tools/ingest.py raw/sources/initial-source.md --title "Initial source import" --kind source
-make wiki-health
+make init-project NAME=existing-project MODE=existing DEST=. SOURCE=/path/to/repo
 ```
 
-Open `wiki/` as an Obsidian vault.
+This creates:
+
+- `<destination>/<project-name>/echel-core/` (framework)
+- `<destination>/<project-name>/<project-name>/` (software project directory)
 
 ## How to Start with Echel
 
@@ -121,6 +123,7 @@ The wizard collects the minimum essential information to initialize:
 ### 2) Validate the initialization
 
 ```bash
+cd <project-name>/echel-core
 make wiki-health
 ```
 
@@ -128,7 +131,7 @@ This verifies that generated artifacts, links, and governance controls are consi
 
 ### 3) Open the wiki in Obsidian
 
-Open `wiki/` as an Obsidian vault.
+Open `<project-name>/echel-core/wiki/` as an Obsidian vault.
 
 Echel generates linked Markdown (`[[wikilinks]]`) so project relationships are visible in Obsidian's graph and remain navigable as the system grows.
 
@@ -136,9 +139,9 @@ Echel generates linked Markdown (`[[wikilinks]]`) so project relationships are v
 
 Use your coding assistant (Codex, Claude Code, Cursor, etc.) to:
 
-1. read project context from the wiki
+1. read project context from `echel-core/wiki`
 2. pick or create a task artifact
-3. implement with verification
+3. implement software inside `<project-name>/<project-name>/`
 4. update linked knowledge artifacts
 5. append the session log
 

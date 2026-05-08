@@ -1,4 +1,4 @@
-.PHONY: session-bootstrap wiki-index wiki-lint wiki-health new-task file-query ingest-initial validate-governance wrw
+.PHONY: session-bootstrap wiki-index wiki-lint wiki-health new-task file-query ingest-initial validate-governance wrw init-wizard init-project
 
 session-bootstrap:
 	python3 tools/session_bootstrap.py
@@ -25,3 +25,9 @@ ingest-initial:
 
 wrw:
 	python3 tools/wrw.py
+
+init-wizard:
+	python3 tools/init_wizard.py
+
+init-project:
+	python3 tools/project_init.py --name "$${NAME:?Set NAME=<project-name>}" --mode "$${MODE:-scratch}" --dest "$${DEST:-.}" $${SOURCE:+--source "$$SOURCE"}
