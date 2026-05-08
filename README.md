@@ -5,6 +5,23 @@
 Echel is a general-purpose scaffold for AI-native software development.
 It implements an LLM Wiki-style persistent knowledge layer plus execution governance for building new systems or evolving existing codebases.
 
+## Four-Layer Operating System
+
+Echel is structured as four integrated layers:
+
+1. Knowledge OS: canonical wiki, ADRs, memory, contradictions, and session continuity.
+2. Execution OS: lifecycle states, typed task graph, dependencies, ownership, and closure gates.
+3. Evidence OS: artifact registry, proof packs, and deterministic verification inputs.
+4. Automation OS: CLI/workflows, gate orchestration, agent playbooks, and brownfield adapters.
+
+v1 architecture/spec references:
+
+- `docs/development/03-architecture/ECHEL_FOUR_LAYER_OS.md`
+- `schema/EXECUTION.md`
+- `docs/development/06-evidence/EVIDENCE_OS_SPEC.md`
+- `docs/development/05-automation/AUTOMATION_OS_SPEC.md`
+- `docs/development/00-governance/GATE_RUNNER_CONTRACT.md`
+
 ## Echel Story
 
 A month ago, I began building Nitra with Codex. What started as a trading infrastructure project quickly exposed a bigger problem: software projects decay faster than teams can document them. Decisions disappear into chats, architecture drifts away from implementation, and development turns into fragmented tribal knowledge.

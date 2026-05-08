@@ -8,7 +8,7 @@
 
 ## In Progress
 
-- [ ] (none)
+- [ ] TASK-0004 Define Echel four-layer OS architecture and v1 contracts
 
 ## Done
 
