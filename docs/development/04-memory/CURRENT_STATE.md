@@ -4,7 +4,7 @@ Last updated: 2026-05-06
 
 ## Completed
 
-- Established Eshel as a general-purpose LLM engineering scaffold.
+- Established Echel as a general-purpose LLM engineering scaffold.
 
 ## Recent
 

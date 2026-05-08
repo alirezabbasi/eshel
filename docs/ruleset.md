@@ -1,4 +1,4 @@
-# Eshel Governance Ruleset
+# Echel Governance Ruleset
 
 This file extends `ruleset.md` with operational controls.
 

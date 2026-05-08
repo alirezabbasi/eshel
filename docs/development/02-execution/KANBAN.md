@@ -12,4 +12,4 @@
 
 ## Done
 
-- [x] Initialized Eshel scaffold governance baseline
+- [x] Initialized Echel scaffold governance baseline

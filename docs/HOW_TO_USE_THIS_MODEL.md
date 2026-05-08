@@ -1,14 +1,14 @@
-# How to Use Eshel to Drive Development
+# How to Use Echel to Drive Development
 
-## How to Start with Eshel
+## How to Start with Echel
 
-Eshel works best when you use it with three things together:
+Echel works best when you use it with three things together:
 
 - an LLM coding tool (`Codex`, `Claude Code`, `Cursor`, or similar)
 - `Obsidian` (as the project knowledge interface)
 - a curious mind (you drive questions, exploration, and decisions)
 
-### 1) Run the Eshel wizard
+### 1) Run the Echel wizard
 
 ```bash
 make init-wizard
@@ -33,7 +33,7 @@ This verifies that generated artifacts, links, and governance controls are consi
 
 Open `wiki/` as an Obsidian vault.
 
-Eshel generates linked Markdown (`[[wikilinks]]`) so project relationships are visible in Obsidian's graph and remain navigable as the system grows.
+Echel generates linked Markdown (`[[wikilinks]]`) so project relationships are visible in Obsidian's graph and remain navigable as the system grows.
 
 ### 4) Start development with your LLM coding tool
 
@@ -51,7 +51,7 @@ The development loop is:
 
 `idea -> structured knowledge -> task -> implementation -> verification -> updated knowledge`
 
-Eshel is designed so code and understanding evolve together, not separately.
+Echel is designed so code and understanding evolve together, not separately.
 
 ## Daily loop
 1. Run `make session-bootstrap`.

@@ -2,7 +2,7 @@
 
 ## 2026-05-06
 
-- Reframed scaffold identity to Eshel.
+- Reframed scaffold identity to Echel.
 - Removed domain-specific defaults.
 - Added governance and memory controls.
 - Added the Project Intelligence Compounding Model as a canonical system artifact.

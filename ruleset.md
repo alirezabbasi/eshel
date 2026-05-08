@@ -1,4 +1,4 @@
-# Eshel Global Ruleset
+# Echel Global Ruleset
 
 This is the highest-priority instruction set for this scaffold.
 
