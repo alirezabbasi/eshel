@@ -180,3 +180,20 @@ Echel now includes a declarative project contract and core operator commands:
 5. `python3 tools/echel.py sync-memory` aligns memory snapshot timestamps.
 6. `python3 tools/echel.py workspace move --dry-run` previews migration-map rewrites.
 7. `python3 tools/echel.py workspace move --apply` applies rewrites and writes a rollback manifest under `.echel/rollback/`.
+
+## Phase 3 Expansion (In Progress)
+
+- Durable memory kernel:
+  - `python3 tools/echel.py memory add --type <type> --title <title> [--link ...] [--contradiction]`
+  - `python3 tools/echel.py memory query [--type <type>] [--contradictions] [--text <query>]`
+- Differential conformance framework:
+  - `python3 tools/echel.py conformance run`
+  - fixtures in `.echel/conformance/fixtures.json`
+  - report output in `wiki/analysis/conformance-report.md`
+- Migration wave planner:
+  - `python3 tools/echel.py migration plan`
+- UX safety rails:
+  - `python3 tools/echel.py workspace move --apply` now requires dry-run impact preview (or `--force`)
+- LLM behavior contracts + runtime adapters:
+  - `python3 tools/echel.py contracts check --current <state> --target <state>`
+  - `python3 tools/echel.py adapters list`

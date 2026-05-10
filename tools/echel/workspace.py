@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 import shutil
+import json
 
 from .config import ProjectConfig, apply_migration_map
 
@@ -49,6 +50,18 @@ def plan_workspace_move(repo_root: Path, cfg: ProjectConfig) -> list[RewriteChan
                 )
             )
     return changes
+
+
+def write_impact_preview(repo_root: Path, changes: list[RewriteChange]) -> Path:
+    preview_path = repo_root / ".echel" / "workspace_move_impact.json"
+    preview_path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "version": 1,
+        "files_to_rewrite": len(changes),
+        "changes": [c.__dict__ for c in changes],
+    }
+    preview_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return preview_path
 
 
 def apply_workspace_move(repo_root: Path, cfg: ProjectConfig) -> Path:

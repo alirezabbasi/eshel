@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "states": [
+    "plan",
+    "implement",
+    "review"
+  ],
+  "transitions": {
+    "plan": [
+      "implement"
+    ],
+    "implement": [
+      "review"
+    ],
+    "review": [
+      "implement"
+    ]
+  },
+  "guards": {
+    "review": [
+      "doctor_pass"
+    ]
+  }
+}

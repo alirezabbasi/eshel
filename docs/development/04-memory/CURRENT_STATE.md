@@ -11,6 +11,7 @@ Last updated: 2026-05-11
 - Added governance, execution, and memory control documents.
 - Defined a project intelligence compounding model with delivery, reliability, and strategy loops.
 - Added v1 Four-Layer OS architecture and contracts for Execution OS, Evidence OS, and Automation OS.
+- Started Phase 3 implementation with memory kernel, conformance runner, migration planner, behavior contracts, runtime adapters, and workspace safety rails.
 
 ## Current
 

@@ -13,3 +13,8 @@
 | 2026-05-10T22:32:12Z | `python3 tools/echel.py start` | validate declarative contract loading and root resolution | success |
 | 2026-05-10T22:32:12Z | `python3 tools/echel.py doctor` | run coherence/evidence/primitives/gate report against current repository state | success (drift detected) |
 | 2026-05-10T22:32:12Z | `python3 tools/echel.py workspace move --dry-run` | verify migration rewrite planner and dry-run output | success |
+| 2026-05-10T22:39:59Z | `python3 tools/echel.py memory add --type note --title \"phase3 kickoff\" --link wiki/log --payload \"initial phase 3 implementation\"` | verify durable memory kernel write path and typed record creation | success |
+| 2026-05-10T22:39:59Z | `python3 tools/echel.py conformance run` | verify fixture-based differential conformance runner and report generation | success |
+| 2026-05-10T22:39:59Z | `python3 tools/echel.py migration plan` | verify migration wave planner and risk scoring output | success |
+| 2026-05-10T22:39:59Z | `python3 tools/echel.py workspace move --apply` | validate safe-apply rail blocks apply without prior impact preview | success (blocked as designed) |
+| 2026-05-10T22:39:59Z | `python3 tools/echel.py contracts check --current plan --target implement` | validate LLM behavior contract transition checks with doctor gate guard | success |

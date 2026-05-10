@@ -29,3 +29,10 @@ status: active
 - Added path abstraction roots and migration-map rewrite support with dry-run/apply workspace move flow and rollback manifests.
 - Added `echel` core commands: `start`, `doctor`, `close-task`, and `sync-memory`.
 - Added coherence drift checks, evidence registry validation/linkage checks, and compiled gate policy execution.
+
+## [2026-05-11] release-2 | phase-3-expansion-started
+- Added durable memory kernel records (`.echel/memory_records.jsonl`) with contradiction-aware querying commands.
+- Added differential conformance runner with fixture definitions and generated analysis report output.
+- Added migration wave planner for phased rollout suggestions with task dependency/risk scoring.
+- Added workspace move safety rails requiring impact preview before apply (unless forced).
+- Added LLM behavior contract checks and initial Python/TypeScript runtime adapter discovery hooks.

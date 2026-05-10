@@ -1,4 +1,4 @@
-.PHONY: session-bootstrap wiki-index wiki-lint wiki-health new-task file-query ingest-initial validate-governance wrw init-wizard init-project echel-start echel-doctor echel-close-task echel-sync-memory echel-workspace-move-dry-run
+.PHONY: session-bootstrap wiki-index wiki-lint wiki-health new-task file-query ingest-initial validate-governance wrw init-wizard init-project echel-start echel-doctor echel-close-task echel-sync-memory echel-workspace-move-dry-run echel-memory-query echel-conformance echel-migration-plan echel-contract-check echel-adapters
 
 session-bootstrap:
 	python3 tools/session_bootstrap.py
@@ -46,3 +46,18 @@ echel-sync-memory:
 
 echel-workspace-move-dry-run:
 	python3 tools/echel.py workspace move --dry-run
+
+echel-memory-query:
+	python3 tools/echel.py memory query
+
+echel-conformance:
+	python3 tools/echel.py conformance run
+
+echel-migration-plan:
+	python3 tools/echel.py migration plan
+
+echel-contract-check:
+	python3 tools/echel.py contracts check --current "$${CURRENT:?Set CURRENT=<state>}" --target "$${TARGET:?Set TARGET=<state>}"
+
+echel-adapters:
+	python3 tools/echel.py adapters list

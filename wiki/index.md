@@ -7,6 +7,7 @@ status: active
 
 ## Analysis
 
+- [[analysis/conformance-report|Conformance Report]]
 - [[analysis/wiki-health-report|Wiki Health Report]]
 
 ## Concepts

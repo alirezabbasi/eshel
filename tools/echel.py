@@ -3,17 +3,21 @@ from __future__ import annotations
 
 import argparse
 from datetime import date
-import json
 from pathlib import Path
 import re
 import sys
 
+from echel.adapters import detect_adapters
 from echel.coherence import detect_drift
+from echel.conformance import run_conformance
 from echel.config import ConfigError, load_config, resolve_root_map
+from echel.contracts import ensure_contracts, validate_transition
 from echel.evidence import ensure_registry, validate_links, validate_registry
 from echel.gates import run_gates
+from echel.memory_kernel import append_record, contradiction_summary, query_records
+from echel.migration_planner import plan_waves
 from echel.primitives import validate_decisions, validate_tasks
-from echel.workspace import apply_workspace_move, plan_workspace_move
+from echel.workspace import apply_workspace_move, plan_workspace_move, write_impact_preview
 
 
 def _load(repo_root: Path):
@@ -160,20 +164,93 @@ def cmd_sync_memory(repo_root: Path) -> int:
     return 0
 
 
-def cmd_workspace_move(repo_root: Path, dry_run: bool) -> int:
+def cmd_workspace_move(repo_root: Path, dry_run: bool, force: bool) -> int:
     cfg = _load(repo_root)
+    changes = plan_workspace_move(repo_root, cfg)
     if dry_run:
-        changes = plan_workspace_move(repo_root, cfg)
         print("workspace move dry-run")
         print(f"- files to rewrite: {len(changes)}")
         for c in changes[:50]:
             print(f"- {c.path} ({c.before_hash} -> {c.after_hash})")
         if len(changes) > 50:
             print(f"- ... and {len(changes) - 50} more")
+        preview = write_impact_preview(repo_root, changes)
+        print(f"- impact preview: {preview}")
+        print("- apply requires fresh preview; use `--force` to bypass")
         return 0
 
+    if not force:
+        preview = repo_root / ".echel" / "workspace_move_impact.json"
+        if not preview.exists():
+            print(
+                "workspace move blocked: run dry-run first to generate impact preview, or use --force",
+                file=sys.stderr,
+            )
+            return 1
     manifest = apply_workspace_move(repo_root, cfg)
     print(f"workspace move applied, rollback manifest: {manifest}")
+    return 0
+
+
+def cmd_memory_add(repo_root: Path, record_type: str, title: str, links: list[str], contradiction: bool, payload: str) -> int:
+    data = {"note": payload} if payload else {}
+    rec = append_record(repo_root, record_type=record_type, title=title, links=links, contradiction=contradiction, payload=data)
+    print(f"added memory record: {rec.record_id}")
+    return 0
+
+
+def cmd_memory_query(repo_root: Path, record_type: str | None, contradiction_only: bool, text: str | None) -> int:
+    rows = query_records(repo_root, record_type=record_type, contradiction_only=contradiction_only, text=text)
+    summary = contradiction_summary(rows)
+    print(f"records={summary['total']} contradictions={summary['contradictions']} ratio={summary['ratio']}")
+    for rec in rows[-50:]:
+        print(f"- {rec.ts} {rec.record_id} {rec.record_type} contradiction={rec.contradiction} title={rec.title}")
+    return 0
+
+
+def cmd_conformance_run(repo_root: Path) -> int:
+    results, report_path = run_conformance(repo_root)
+    code = 0
+    for r in results:
+        parity = r.legacy_exit == r.new_exit
+        print(f"{r.name}: {'PASS' if parity else 'FAIL'} (legacy={r.legacy_exit}, new={r.new_exit})")
+        if not parity:
+            code = 1
+    print(f"report: {report_path}")
+    return code
+
+
+def cmd_migration_plan(repo_root: Path) -> int:
+    waves = plan_waves(repo_root)
+    print("migration waves")
+    for w in waves:
+        print(f"- wave {w.wave}: tasks={len(w.tasks)} risk={w.risk_score}")
+        for t in w.tasks:
+            print(f"  - {t}")
+    return 0
+
+
+def cmd_contract_check(repo_root: Path, current: str, target: str) -> int:
+    contract = ensure_contracts(repo_root)
+    doctor_pass = cmd_doctor(repo_root) == 0
+    ok, msg = validate_transition(contract, current=current, target=target, doctor_pass=doctor_pass)
+    if ok:
+        print(f"contract: PASS ({msg})")
+        return 0
+    print(f"contract: FAIL ({msg})", file=sys.stderr)
+    return 1
+
+
+def cmd_adapters(repo_root: Path) -> int:
+    found = detect_adapters(repo_root)
+    if not found:
+        print("no runtime adapters detected")
+        return 0
+    print("runtime adapters")
+    for a in found:
+        print(f"- {a.name}")
+        print(f"  task-hook: {a.task_hook}")
+        print(f"  evidence-hook: {a.evidence_hook}")
     return 0
 
 
@@ -195,6 +272,38 @@ def build_parser() -> argparse.ArgumentParser:
     mode = move.add_mutually_exclusive_group()
     mode.add_argument("--dry-run", action="store_true")
     mode.add_argument("--apply", action="store_true")
+    move.add_argument("--force", action="store_true")
+
+    memory = sub.add_parser("memory")
+    memory_sub = memory.add_subparsers(dest="memory_cmd", required=True)
+    madd = memory_sub.add_parser("add")
+    madd.add_argument("--type", required=True)
+    madd.add_argument("--title", required=True)
+    madd.add_argument("--link", action="append", default=[])
+    madd.add_argument("--contradiction", action="store_true")
+    madd.add_argument("--payload", default="")
+    mquery = memory_sub.add_parser("query")
+    mquery.add_argument("--type")
+    mquery.add_argument("--contradictions", action="store_true")
+    mquery.add_argument("--text")
+
+    conf = sub.add_parser("conformance")
+    conf_sub = conf.add_subparsers(dest="conformance_cmd", required=True)
+    conf_sub.add_parser("run")
+
+    mig = sub.add_parser("migration")
+    mig_sub = mig.add_subparsers(dest="migration_cmd", required=True)
+    mig_sub.add_parser("plan")
+
+    contracts = sub.add_parser("contracts")
+    ctr_sub = contracts.add_subparsers(dest="contracts_cmd", required=True)
+    check = ctr_sub.add_parser("check")
+    check.add_argument("--current", required=True)
+    check.add_argument("--target", required=True)
+
+    adapters = sub.add_parser("adapters")
+    adapters_sub = adapters.add_subparsers(dest="adapters_cmd", required=True)
+    adapters_sub.add_parser("list")
 
     return p
 
@@ -213,7 +322,19 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_sync_memory(root)
     if args.cmd == "workspace" and args.workspace_cmd == "move":
         dry_run = True if args.dry_run or not args.apply else False
-        return cmd_workspace_move(root, dry_run=dry_run)
+        return cmd_workspace_move(root, dry_run=dry_run, force=args.force)
+    if args.cmd == "memory" and args.memory_cmd == "add":
+        return cmd_memory_add(root, record_type=args.type, title=args.title, links=args.link, contradiction=args.contradiction, payload=args.payload)
+    if args.cmd == "memory" and args.memory_cmd == "query":
+        return cmd_memory_query(root, record_type=args.type, contradiction_only=args.contradictions, text=args.text)
+    if args.cmd == "conformance" and args.conformance_cmd == "run":
+        return cmd_conformance_run(root)
+    if args.cmd == "migration" and args.migration_cmd == "plan":
+        return cmd_migration_plan(root)
+    if args.cmd == "contracts" and args.contracts_cmd == "check":
+        return cmd_contract_check(root, current=args.current, target=args.target)
+    if args.cmd == "adapters" and args.adapters_cmd == "list":
+        return cmd_adapters(root)
 
     print("unknown command", file=sys.stderr)
     return 2
