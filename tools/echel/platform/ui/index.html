@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Echel Platform</title>
+  <style>
+    :root { --bg:#0f172a; --panel:#111827; --line:#374151; --text:#e5e7eb; --muted:#9ca3af; --accent:#22c55e; }
+    body { margin:0; font-family: ui-sans-serif,system-ui,sans-serif; background: radial-gradient(circle at 20% 10%, #1f2937, var(--bg)); color: var(--text); }
+    .wrap { display:grid; grid-template-columns: 320px 1fr; min-height:100vh; }
+    .side { border-right:1px solid var(--line); padding:16px; background: rgba(17,24,39,0.9); }
+    .main { display:flex; flex-direction:column; }
+    h1 { font-size:20px; margin:0 0 12px; }
+    h2 { font-size:14px; margin:14px 0 8px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+    input, select, button { width:100%; box-sizing:border-box; padding:10px; margin:6px 0; border-radius:8px; border:1px solid var(--line); background:#0b1220; color:var(--text); }
+    button { cursor:pointer; background:linear-gradient(90deg,#14532d,#166534); border:none; }
+    button:hover { filter:brightness(1.1); }
+    .threads button { text-align:left; background:#0b1220; border:1px solid var(--line); }
+    #chat { flex:1; overflow:auto; padding:16px; }
+    .msg { max-width:80%; padding:12px; border-radius:10px; margin:8px 0; white-space:pre-wrap; }
+    .user { margin-left:auto; background:#1d4ed8; }
+    .assistant { background:#1f2937; }
+    .composer { display:grid; grid-template-columns: 1fr 140px; gap:8px; padding:12px; border-top:1px solid var(--line); }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <aside class="side">
+      <h1>Echel Platform</h1>
+      <h2>Provider</h2>
+      <input id="p-name" placeholder="name (openai-main)" />
+      <div class="row">
+        <select id="p-type">
+          <option value="openai">openai</option>
+          <option value="anthropic">anthropic</option>
+          <option value="openai_compatible">openai_compatible</option>
+        </select>
+        <input id="p-model" placeholder="model" />
+      </div>
+      <input id="p-base" placeholder="base url" />
+      <input id="p-key" type="password" placeholder="api key" />
+      <button onclick="connectProvider()">Connect Provider</button>
+      <select id="provider-select"></select>
+
+      <h2>Threads</h2>
+      <input id="thread-title" placeholder="thread title" />
+      <button onclick="createThread()">Create Thread</button>
+      <div id="thread-list" class="threads"></div>
+    </aside>
+    <main class="main">
+      <div id="chat"></div>
+      <div class="composer">
+        <input id="message" placeholder="Type message or /echel doctor" />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </main>
+  </div>
+<script>
+let currentThread = null;
+
+async function api(path, opts={}) {
+  const res = await fetch(path, {headers:{'Content-Type':'application/json'}, ...opts});
+  if(!res.ok) {
+    const t = await res.text();
+    throw new Error(t);
+  }
+  return res.json();
+}
+
+function renderMessages(rows) {
+  const chat = document.getElementById('chat');
+  chat.innerHTML = rows.map(r => `<div class="msg ${r.role}">${escapeHtml(r.content)}</div>`).join('');
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function escapeHtml(str){return str.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
+
+async function loadProviders() {
+  const rows = await api('/api/providers');
+  const sel = document.getElementById('provider-select');
+  sel.innerHTML = rows.map(p => `<option value="${p.id}">${p.name} (${p.model})</option>`).join('');
+}
+
+async function connectProvider() {
+  await api('/api/providers/connect', {method:'POST', body: JSON.stringify({
+    name: document.getElementById('p-name').value,
+    provider_type: document.getElementById('p-type').value,
+    base_url: document.getElementById('p-base').value,
+    model: document.getElementById('p-model').value,
+    api_key: document.getElementById('p-key').value,
+  })});
+  await loadProviders();
+}
+
+async function loadThreads() {
+  const rows = await api('/api/threads');
+  const el = document.getElementById('thread-list');
+  el.innerHTML = rows.map(t => `<button onclick="openThread(${t.id})">#${t.id} ${escapeHtml(t.title)}</button>`).join('');
+}
+
+async function createThread() {
+  const title = document.getElementById('thread-title').value || 'New Thread';
+  const res = await api('/api/threads', {method:'POST', body: JSON.stringify({title})});
+  await loadThreads();
+  await openThread(res.thread_id);
+}
+
+async function openThread(id) {
+  currentThread = id;
+  const rows = await api(`/api/threads/${id}/messages`);
+  renderMessages(rows);
+}
+
+async function sendMessage() {
+  if(!currentThread){ alert('Create/open a thread first'); return; }
+  const input = document.getElementById('message');
+  const message = input.value.trim();
+  if(!message) return;
+  input.value = '';
+
+  const providerId = document.getElementById('provider-select').value;
+  await api('/api/chat', {method:'POST', body: JSON.stringify({
+    thread_id: currentThread,
+    provider_id: providerId ? Number(providerId) : null,
+    message,
+  })});
+  await openThread(currentThread);
+}
+
+(async function init(){
+  await loadProviders();
+  await loadThreads();
+})();
+</script>
+</body>
+</html>

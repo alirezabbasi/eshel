@@ -18,3 +18,7 @@
 | 2026-05-10T22:39:59Z | `python3 tools/echel.py migration plan` | verify migration wave planner and risk scoring output | success |
 | 2026-05-10T22:39:59Z | `python3 tools/echel.py workspace move --apply` | validate safe-apply rail blocks apply without prior impact preview | success (blocked as designed) |
 | 2026-05-10T22:39:59Z | `python3 tools/echel.py contracts check --current plan --target implement` | validate LLM behavior contract transition checks with doctor gate guard | success |
+| 2026-05-10T22:53:41Z | `python3 -m py_compile tools/echel.py tools/echel/platform/*.py` | validate platform sprint 1 modules and CLI wiring are syntactically valid | success |
+| 2026-05-10T22:53:41Z | `python3 tools/echel.py platform init` | generate platform runtime config and verify platform command bootstrap | success |
+| 2026-05-10T22:53:41Z | `python3 tools/echel.py doctor` | verify platform additions did not break core integrity checks | success |
+| 2026-05-10T22:53:41Z | `make wiki-health` | run mandatory closure gates after platform sprint 1 changes | success |

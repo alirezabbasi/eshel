@@ -36,3 +36,9 @@ status: active
 - Added migration wave planner for phased rollout suggestions with task dependency/risk scoring.
 - Added workspace move safety rails requiring impact preview before apply (unless forced).
 - Added LLM behavior contract checks and initial Python/TypeScript runtime adapter discovery hooks.
+
+## [2026-05-11] platform | sprint-1-self-hosted-web-interface
+- Added `echel platform init` and `echel platform up` CLI commands.
+- Added FastAPI-based self-hosted web runtime with local SQLite storage for providers, threads, and messages.
+- Added provider adapter layer for `openai`, `anthropic`, and `openai_compatible` endpoints.
+- Added minimal web UI for provider connection, thread creation, and chat, including `/echel ...` command bridge for safe command subset.

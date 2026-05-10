@@ -17,6 +17,7 @@ Last updated: 2026-05-11
 
 - Operating a v2 MVP CLI foundation with declarative project contracts, path abstraction, drift detection, evidence validation, and gate compilation.
 - Hardening task closure and memory synchronization workflows through `echel` core commands.
+- Building Platform MVP Sprint 1 for self-hosted multi-provider chat interface and Echel command orchestration via web runtime.
 
 ## Next
 

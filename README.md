@@ -197,3 +197,21 @@ Echel now includes a declarative project contract and core operator commands:
 - LLM behavior contracts + runtime adapters:
   - `python3 tools/echel.py contracts check --current <state> --target <state>`
   - `python3 tools/echel.py adapters list`
+
+## Platform MVP Sprint 1 (Self-Hosted Web Interface)
+
+- Initialize platform runtime:
+  - `python3 tools/echel.py platform init`
+- Launch self-hosted interface:
+  - `python3 tools/echel.py platform up --host 127.0.0.1 --port 8787`
+- Open browser:
+  - `http://127.0.0.1:8787`
+
+What Sprint 1 includes:
+- SQLite-backed platform state (`.echel/platform/platform.db`)
+- Provider connection management for:
+  - `openai`
+  - `anthropic`
+  - `openai_compatible`
+- Multi-thread chat storage
+- Chat-driven Echel command bridge via `/echel ...` messages for safe command subset

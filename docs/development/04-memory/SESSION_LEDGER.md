@@ -20,3 +20,4 @@
 - Added workspace migration dry-run/apply flow with automatic rewrite and rollback manifest generation.
 - Added coherence drift checks, evidence registry validation, and compiled policy gates in `echel doctor`.
 - Began Phase 3 expansion by adding memory records/timeline querying, conformance fixture runner, migration wave planning, behavior contracts, and runtime adapter detection.
+- Began Platform MVP Sprint 1 by adding a self-hosted FastAPI web runtime, SQLite-backed chat/provider storage, provider adapters, and web command bridge hooks.

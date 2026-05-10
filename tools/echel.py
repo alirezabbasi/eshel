@@ -16,6 +16,7 @@ from echel.evidence import ensure_registry, validate_links, validate_registry
 from echel.gates import run_gates
 from echel.memory_kernel import append_record, contradiction_summary, query_records
 from echel.migration_planner import plan_waves
+from echel.platform.runtime import ensure_platform_config, load_platform_config
 from echel.primitives import validate_decisions, validate_tasks
 from echel.workspace import apply_workspace_move, plan_workspace_move, write_impact_preview
 
@@ -254,6 +255,28 @@ def cmd_adapters(repo_root: Path) -> int:
     return 0
 
 
+def cmd_platform_init(repo_root: Path) -> int:
+    path = ensure_platform_config(repo_root)
+    print(f"platform config ready: {path}")
+    return 0
+
+
+def cmd_platform_up(repo_root: Path, host: str | None, port: int | None) -> int:
+    cfg = load_platform_config(repo_root)
+    listen_host = host or str(cfg.get("host", "127.0.0.1"))
+    listen_port = int(port or cfg.get("port", 8787))
+    try:
+        import uvicorn
+    except ImportError:
+        print("platform up requires uvicorn and fastapi. Install with: pip install fastapi uvicorn", file=sys.stderr)
+        return 2
+    from echel.platform.app import create_app
+
+    app = create_app(repo_root)
+    uvicorn.run(app, host=listen_host, port=listen_port)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="echel")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -305,6 +328,13 @@ def build_parser() -> argparse.ArgumentParser:
     adapters_sub = adapters.add_subparsers(dest="adapters_cmd", required=True)
     adapters_sub.add_parser("list")
 
+    platform = sub.add_parser("platform")
+    platform_sub = platform.add_subparsers(dest="platform_cmd", required=True)
+    platform_sub.add_parser("init")
+    up = platform_sub.add_parser("up")
+    up.add_argument("--host")
+    up.add_argument("--port", type=int)
+
     return p
 
 
@@ -335,6 +365,10 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_contract_check(root, current=args.current, target=args.target)
     if args.cmd == "adapters" and args.adapters_cmd == "list":
         return cmd_adapters(root)
+    if args.cmd == "platform" and args.platform_cmd == "init":
+        return cmd_platform_init(root)
+    if args.cmd == "platform" and args.platform_cmd == "up":
+        return cmd_platform_up(root, host=args.host, port=args.port)
 
     print("unknown command", file=sys.stderr)
     return 2

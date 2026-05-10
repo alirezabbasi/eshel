@@ -8,4 +8,7 @@ raw/codebase/*/.git/
 # Obsidian local/app state (not project source)
 wiki/.obsidian/
 
+# Echel platform runtime state
+.echel/platform/*.db
+.echel/platform/*.db-*
 
