@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "roots": {
+    "SRC_ROOT": ".",
+    "LANG_ROOT": "tools",
+    "MEMORY_ROOT": "docs/development/04-memory"
+  },
+  "migration_map": {},
+  "gate_policy": ".echel/gates.json",
+  "evidence_registry": ".echel/evidence_registry.json"
+}

@@ -23,3 +23,9 @@ status: active
 - Clarified generated project topology: target software repository is the root artifact, with Echel relocated under `echel-core/`.
 - Updated guidance so implementation happens at target project root while orchestration remains in `echel-core`.
 - Recorded decision to keep `echel-core` out of target-project Git history via `.gitignore`.
+
+## [2026-05-11] release-2 | v2-mvp-foundation
+- Added declarative `project.echel` contract loading and validation.
+- Added path abstraction roots and migration-map rewrite support with dry-run/apply workspace move flow and rollback manifests.
+- Added `echel` core commands: `start`, `doctor`, `close-task`, and `sync-memory`.
+- Added coherence drift checks, evidence registry validation/linkage checks, and compiled gate policy execution.

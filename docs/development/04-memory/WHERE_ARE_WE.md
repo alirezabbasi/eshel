@@ -1,6 +1,6 @@
 # Where Are We
 
-Last updated: 2026-05-08
+Last updated: 2026-05-11
 
 ## Completed
 
@@ -18,14 +18,14 @@ Last updated: 2026-05-08
 
 ## Current
 
-- Implementing four-layer contracts into operational workflows and templates.
-- Preparing lifecycle-aware execution and evidence tooling for readiness gating.
+- Running v2 MVP foundation commands with declarative project contract loading.
+- Enforcing integrity through `echel doctor` drift and evidence/gate reporting.
 
 ## Next
 
-1. Implement task graph + lifecycle state tooling.
-2. Implement registry-backed proof packs.
-3. Add `echel gate` and `echel readiness` command flows.
+1. Add durable memory kernel and contradiction tracking.
+2. Add differential conformance tooling and CI summary outputs.
+3. Add migration planner, runtime adapters, and safety rails.
 
 ## Risks/Blocks
 

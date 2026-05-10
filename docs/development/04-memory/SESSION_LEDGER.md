@@ -12,3 +12,10 @@
 - Defined Echel as a four-layer operating system: Knowledge, Execution, Evidence, and Automation.
 - Added v1 architecture and contract docs for lifecycle, typed execution nodes, evidence registry, proof packs, and deterministic gate running.
 - Updated top-level project docs to make the four-layer model first-class.
+
+## 2026-05-11
+
+- Implemented v2 MVP foundation tooling in `tools/echel.py` and supporting modules.
+- Added `project.echel` contract loading/validation and symbolic root resolution.
+- Added workspace migration dry-run/apply flow with automatic rewrite and rollback manifest generation.
+- Added coherence drift checks, evidence registry validation, and compiled policy gates in `echel doctor`.

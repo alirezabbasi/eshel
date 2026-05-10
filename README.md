@@ -1,4 +1,4 @@
-# Echel - LLM Engineering OS Scaffold
+# Echel - LLM Engineering OS
 
 ![Echel Banner](assets/echel.png)
 
@@ -168,3 +168,15 @@ prompts/  repeatable workflows
 tools/    automation and quality gates
 docs/     governance and project controls
 ```
+
+## v2 MVP CLI Foundation
+
+Echel now includes a declarative project contract and core operator commands:
+
+1. `project.echel` is the project contract file (schema + roots + migration map + gate/evidence paths).
+2. `python3 tools/echel.py start` validates and loads project roots.
+3. `python3 tools/echel.py doctor` runs primitive checks, drift detection, evidence validation, and compiled gates.
+4. `python3 tools/echel.py close-task TASK-0001` enforces evidence links before closure and syncs KANBAN.
+5. `python3 tools/echel.py sync-memory` aligns memory snapshot timestamps.
+6. `python3 tools/echel.py workspace move --dry-run` previews migration-map rewrites.
+7. `python3 tools/echel.py workspace move --apply` applies rewrites and writes a rollback manifest under `.echel/rollback/`.

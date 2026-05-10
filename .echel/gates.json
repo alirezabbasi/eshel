@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "gates": [
+    {
+      "id": "GATE-SCHEMA",
+      "checks": [
+        "schema",
+        "primitives"
+      ]
+    },
+    {
+      "id": "GATE-INTEGRITY",
+      "checks": [
+        "coherence",
+        "evidence-links"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Current State
 
-Last updated: 2026-05-08
+Last updated: 2026-05-11
 
 ## Completed
 
@@ -14,15 +14,15 @@ Last updated: 2026-05-08
 
 ## Current
 
-- Operationalizing four-layer contracts into task templates, gate runners, and CLI workflows.
-- Hardening deterministic quality and evidence gates for closure and release readiness.
+- Operating a v2 MVP CLI foundation with declarative project contracts, path abstraction, drift detection, evidence validation, and gate compilation.
+- Hardening task closure and memory synchronization workflows through `echel` core commands.
 
 ## Next
 
-1. Implement task graph and lifecycle schema tooling.
-2. Implement artifact registry and proof-pack generation flow.
-3. Implement deterministic gate runner command and readiness report.
-4. Add project adapters for incremental adoption in existing repos.
+1. Expand durable memory kernel with typed memory records and contradiction flags.
+2. Add differential conformance runner for legacy/new behavior diffing.
+3. Add migration wave planner and runtime adapters (Python/TypeScript).
+4. Add UX safety rails and phase-specific LLM behavior contracts.
 
 ## Risks/Blocks
 

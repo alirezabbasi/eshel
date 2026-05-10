@@ -10,3 +10,6 @@
 | 2026-05-10T20:47:23Z | `python3 tools/project_init.py --name echel_scratch_test --mode scratch --dest /tmp` | verify generated workspace uses project-root model with internal `echel-core/` | success |
 | 2026-05-10T20:47:23Z | `python3 tools/project_init.py --name echel_existing_test --mode existing --dest /tmp --source /tmp/echel_existing_src` | verify existing-repo import plus root `.gitignore` injection for `echel-core/` | success |
 | 2026-05-10T20:47:23Z | `make wiki-health` | run required quality and governance gates after generator/template changes | success |
+| 2026-05-10T22:32:12Z | `python3 tools/echel.py start` | validate declarative contract loading and root resolution | success |
+| 2026-05-10T22:32:12Z | `python3 tools/echel.py doctor` | run coherence/evidence/primitives/gate report against current repository state | success (drift detected) |
+| 2026-05-10T22:32:12Z | `python3 tools/echel.py workspace move --dry-run` | verify migration rewrite planner and dry-run output | success |

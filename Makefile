@@ -1,4 +1,4 @@
-.PHONY: session-bootstrap wiki-index wiki-lint wiki-health new-task file-query ingest-initial validate-governance wrw init-wizard init-project
+.PHONY: session-bootstrap wiki-index wiki-lint wiki-health new-task file-query ingest-initial validate-governance wrw init-wizard init-project echel-start echel-doctor echel-close-task echel-sync-memory echel-workspace-move-dry-run
 
 session-bootstrap:
 	python3 tools/session_bootstrap.py
@@ -31,3 +31,18 @@ init-wizard:
 
 init-project:
 	python3 tools/project_init.py --name "$${NAME:?Set NAME=<project-name>}" --mode "$${MODE:-scratch}" --dest "$${DEST:-.}" $${SOURCE:+--source "$$SOURCE"}
+
+echel-start:
+	python3 tools/echel.py start
+
+echel-doctor:
+	python3 tools/echel.py doctor
+
+echel-close-task:
+	python3 tools/echel.py close-task "$${TASK:?Set TASK=TASK-XXXX}"
+
+echel-sync-memory:
+	python3 tools/echel.py sync-memory
+
+echel-workspace-move-dry-run:
+	python3 tools/echel.py workspace move --dry-run
