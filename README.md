@@ -96,8 +96,11 @@ make init-project NAME=existing-project MODE=existing DEST=. SOURCE=/path/to/rep
 
 This creates:
 
-- `<destination>/<project-name>/echel-core/` (framework)
-- `<destination>/<project-name>/<project-name>/` (software project directory)
+- `<destination>/<project-name>/` as the target software project repository root
+- `<destination>/<project-name>/echel-core/` as the internal Echel framework folder inside that repository
+
+The generated repository is branded as the target project (name, README, license, and identity).
+`echel-core` orchestrates workflow and governance from inside the project, but it should be ignored in the target project's VCS (`.gitignore`) so only the software project artifact is committed and pushed.
 
 ## How to Start with Echel
 
@@ -141,7 +144,7 @@ Use your coding assistant (Codex, Claude Code, Cursor, etc.) to:
 
 1. read project context from `echel-core/wiki`
 2. pick or create a task artifact
-3. implement software inside `<project-name>/<project-name>/`
+3. implement software in the target project repository root (outside `echel-core`)
 4. update linked knowledge artifacts
 5. append the session log
 

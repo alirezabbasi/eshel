@@ -45,8 +45,29 @@ def copy_core_template(repo_root: Path, echel_core_dir: Path) -> None:
             shutil.copy2(src, dst)
 
 
-def write_workspace_gitignore(workspace_dir: Path) -> None:
-    (workspace_dir / ".gitignore").write_text(
+def copy_existing_source(source_dir: Path, workspace_dir: Path) -> None:
+    shutil.copytree(
+        source_dir,
+        workspace_dir,
+        ignore=shutil.ignore_patterns(".git", "echel-core"),
+    )
+
+
+def ensure_workspace_gitignore(workspace_dir: Path) -> None:
+    gitignore_path = workspace_dir / ".gitignore"
+    required_line = "echel-core/"
+    if gitignore_path.exists():
+        current = gitignore_path.read_text(encoding="utf-8")
+        if required_line not in current.splitlines():
+            suffix = "" if current.endswith("\n") else "\n"
+            gitignore_path.write_text(
+                current
+                + f"{suffix}\n# Keep Echel framework out of project repository\n{required_line}\n",
+                encoding="utf-8",
+            )
+        return
+
+    gitignore_path.write_text(
         "# Keep Echel framework out of project repository\n"
         "echel-core/\n"
         "\n"
@@ -58,29 +79,43 @@ def write_workspace_gitignore(workspace_dir: Path) -> None:
     )
 
 
-def write_project_readme(project_dir: Path, project_name: str, mode: str, source: str | None) -> None:
+def write_project_identity_files(workspace_dir: Path, project_name: str, mode: str, source: str | None) -> None:
+    readme_path = workspace_dir / "README.md"
+    license_path = workspace_dir / "LICENSE"
+
+    if readme_path.exists():
+        return
+
     lines = [
         f"# {project_name}",
         "",
-        "This is the software project workspace initialized by Echel.",
+        "This is the software project repository initialized by Echel.",
         "",
         "## Structure",
         "",
-        "- `../echel-core/`: Echel framework, governance, and initialization artifacts",
-        f"- `./`: Project codebase for `{project_name}`",
+        "- `./`: Project codebase and repository root",
+        "- `./echel-core/`: Internal Echel framework for governance and workflow orchestration",
         "",
         "## Next steps",
         "",
-        "1. Initialize this folder as its own Git repository.",
-        "2. Start implementing software in this directory.",
-        "3. Use `../echel-core` for governance and knowledge workflows.",
+        "1. Start implementing software in this repository root.",
+        "2. Use `./echel-core` for governance and knowledge workflows.",
+        "3. Keep `echel-core/` ignored by this repository's Git history.",
         "",
         f"Initialization mode: `{mode}`",
     ]
     if source:
         lines.append(f"Source path: `{source}`")
     lines.append("")
-    (project_dir / "README.md").write_text("\n".join(lines), encoding="utf-8")
+    readme_path.write_text("\n".join(lines), encoding="utf-8")
+
+    if not license_path.exists():
+        license_path.write_text(
+            "Copyright (c) "
+            f"{datetime.now(timezone.utc).year} {project_name}\n\n"
+            "All rights reserved.\n",
+            encoding="utf-8",
+        )
 
 
 def update_core_context(echel_core_dir: Path, project_name: str, mode: str, source: str | None) -> None:
@@ -99,7 +134,7 @@ def update_core_context(echel_core_dir: Path, project_name: str, mode: str, sour
         f.write(
             f"\n## [{stamp}] init | {project_name}\n"
             f"- Initialized project in `{mode}` mode.\n"
-            f"- Generated split workspace with `echel-core/` and `{project_name}/`.\n"
+            f"- Generated project-root workspace with internal `echel-core/` orchestration.\n"
         )
         if source:
             f.write(f"- Source path: `{source}`.\n")
@@ -113,26 +148,32 @@ def main() -> int:
     repo_root = Path(__file__).resolve().parents[1]
     dest_parent = Path(args.dest).resolve()
     workspace_dir = dest_parent / args.name
+    source_dir = Path(args.source).resolve() if args.source else None
 
     if workspace_dir.exists():
         raise SystemExit(f"Target workspace already exists: {workspace_dir}")
+    if args.mode == "existing":
+        if source_dir is None or not source_dir.is_dir():
+            raise SystemExit(f"Invalid --source path: {args.source}")
 
     echel_core_dir = workspace_dir / "echel-core"
-    project_dir = workspace_dir / args.name
 
-    workspace_dir.mkdir(parents=True, exist_ok=False)
+    if args.mode == "existing":
+        copy_existing_source(source_dir, workspace_dir)
+    else:
+        workspace_dir.mkdir(parents=True, exist_ok=False)
+
     copy_core_template(repo_root, echel_core_dir)
-    project_dir.mkdir(parents=True, exist_ok=False)
-    write_workspace_gitignore(workspace_dir)
-    write_project_readme(project_dir, args.name, args.mode, args.source)
+    ensure_workspace_gitignore(workspace_dir)
+    write_project_identity_files(workspace_dir, args.name, args.mode, args.source)
     update_core_context(echel_core_dir, args.name, args.mode, args.source)
 
     print(f"Initialized workspace: {workspace_dir}")
     print(f"- Echel framework: {echel_core_dir}")
-    print(f"- Project directory: {project_dir}")
+    print(f"- Project repository root: {workspace_dir}")
     print("Next:")
-    print(f"  cd {echel_core_dir} && make session-bootstrap")
-    print(f"  cd {project_dir} && git init")
+    print(f"  cd {workspace_dir} && git init")
+    print(f"  cd {workspace_dir}/echel-core && make session-bootstrap")
     return 0
 
 

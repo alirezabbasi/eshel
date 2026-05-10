@@ -11,9 +11,9 @@ def ask(prompt: str, default: str | None = None) -> str:
 
 def main() -> int:
     print("Echel Initialization Wizard")
-    print("This creates a new workspace with:")
-    print("- echel-core/ (framework)")
-    print("- <project-name>/ (software project)\n")
+    print("This creates a target software project repository where:")
+    print("- <project-name>/ is the repository root for your software")
+    print("- <project-name>/echel-core/ is the internal Echel framework\n")
 
     name = ask("Project name")
     while not name:

@@ -18,3 +18,8 @@ status: active
 - Defined Echel as a four-layer operating system: Knowledge OS, Execution OS, Evidence OS, and Automation OS.
 - Added v1 architecture and contract docs covering lifecycle states, typed task graph, artifact registry, proof packs, and deterministic gate running.
 - Updated execution and memory artifacts so rollout is traceable and operationally visible.
+
+## [2026-05-10] repo-model | target-root-with-internal-echel-core
+- Clarified generated project topology: target software repository is the root artifact, with Echel relocated under `echel-core/`.
+- Updated guidance so implementation happens at target project root while orchestration remains in `echel-core`.
+- Recorded decision to keep `echel-core` out of target-project Git history via `.gitignore`.
